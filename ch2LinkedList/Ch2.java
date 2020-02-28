@@ -472,7 +472,7 @@ class MyLinkedList  {
 
 }
 
-public class Main {
+public class Ch2 {
     
     public static void main(String[] args) {
         /*MyLinkedList l = new MyLinkedList();

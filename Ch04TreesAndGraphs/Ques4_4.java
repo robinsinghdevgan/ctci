@@ -56,8 +56,6 @@ public class Ques4_4 {
         }
 
         public Integer depth() {
-            List<String> res = new LinkedList<String>();
-            StringBuilder sb = new StringBuilder();
             Queue<TreeNode> mainQ = new LinkedList<TreeNode>();
             Queue<TreeNode> childQ = new LinkedList<TreeNode>();
             mainQ.add(root);

@@ -152,9 +152,80 @@ pair<int, int> nextBigSmallIntWithSameSetBits_2(int n)
     return make_pair(getPrev(n), getNext(n));
 }
 
-int test_brute_force()
+int getNextArith(int n)
 {
-    int n = 6;
+    int c = n;
+    int c0 = 0;
+    int c1 = 0;
+    while (((c & 1) == 0) && (c != 0))
+    {
+        c0++;
+        c >>= 1;
+    }
+
+    while ((c & 1) == 1)
+    {
+        c1++;
+        c >>= 1;
+    }
+
+    /* If c is 0, then n is a sequence of 1s followed by a sequence of 0s. This is already the biggest
+		 * number with c1 ones. Return error.
+		 */
+    if (c0 + c1 == 31 || c0 + c1 == 0)
+    {
+        return -1;
+    }
+
+    /* Arithmetically:
+		 * 2^c0 = 1 << c0
+		 * 2^(c1-1) = 1 << (c0 - 1)
+		 * next = n + 2^c0 + 2^(c1-1) - 1;
+		 */
+
+    return n + (1 << c0) + (1 << (c1 - 1)) - 1;
+}
+
+int getPrevArith(int n)
+{
+    int temp = n;
+    int c0 = 0;
+    int c1 = 0;
+    while (((temp & 1) == 1) && (temp != 0))
+    {
+        c1++;
+        temp >>= 1;
+    }
+
+    /* If temp is 0, then the number is a sequence of 0s followed by a sequence of 1s. This is already
+		 * the smallest number with c1 ones. Return -1 for an error.
+		 */
+    if (temp == 0)
+    {
+        return -1;
+    }
+
+    while ((temp & 1) == 0 && (temp != 0))
+    {
+        c0++;
+        temp >>= 1;
+    }
+
+    /* Arithmetic:
+		 * 2^c1 = 1 << c1
+		 * 2^(c0 - 1) = 1 << (c0 - 1)
+		 */
+    return n - (1 << c1) - (1 << (c0 - 1)) + 1;
+}
+
+pair<int, int> nextBigSmallIntWithSameSetBits_3(int n)
+{
+    return make_pair(getPrevArith(n), getNextArith(n));
+}
+
+int test_brute_force(int n)
+{
+    cout << "********Test Brute Force*********\n for n = " << n << "\n";
     cout << "Integer: " << n << " b: " << bitset<32>(n) << "\n";
     pair<int, int> x = nextBigSmallIntWithSameSetBits(n);
     cout << "Small:   " << x.first << " b: " << bitset<32>(x.first) << "\n";
@@ -162,9 +233,9 @@ int test_brute_force()
     return 0;
 }
 
-int test_bit_manipulation()
+int test_bit_manipulation(int n)
 {
-    int n = 6;
+    cout << "*******Test Bit_Manipulation********\n for n = " << n << "\n";
     cout << "Integer: " << n << " b: " << bitset<32>(n) << "\n";
     pair<int, int> x = nextBigSmallIntWithSameSetBits_2(n);
     cout << "Small:   " << x.first << " b: " << bitset<32>(x.first) << "\n";
@@ -172,10 +243,23 @@ int test_bit_manipulation()
     return 0;
 }
 
+int test_arithmetic_approach(int n)
+{
+    cout << "*******Test Arithmetic Approach********\n for n = " << n << "\n";
+    cout << "Integer: " << n << " b: " << bitset<32>(n) << "\n";
+    pair<int, int> x = nextBigSmallIntWithSameSetBits_3(n);
+    cout << "Small:   " << x.first << " b: " << bitset<32>(x.first) << "\n";
+    cout << "Big:     " << x.second << " b: " << bitset<32>(x.second) << "\n\n";
+    return 0;
+}
 int main()
 {
     getNext(6);
-    assert(test_brute_force() == 0);
-    assert(test_bit_manipulation() == 0);
+    for (int i = 0; i < 20; ++i)
+    {
+        assert(test_brute_force(i) == 0);
+        assert(test_bit_manipulation(i) == 0);
+        assert(test_arithmetic_approach(i) == 0);
+    }
     return 0;
 }

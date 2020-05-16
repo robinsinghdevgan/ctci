@@ -1,21 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
-void drawLine(uint8_t screen[], int width, int x1, int x2, int y)
+void drawLine(uint8_t screen[], unsigned width, unsigned x1, unsigned x2, unsigned y)
 {
-    int start_offset = x1 % 8; //from which bit line would start?
-    int first_full_byte = x1 / 8; //
+    unsigned start_offset = x1 % 8;    //from which bit line would start?
+    unsigned first_full_byte = x1 / 8; //
     if (start_offset != 0)
         first_full_byte++;
-    
-    int end_offset = x2 % 8; //at which bit line would end?
-    int last_full_byte = x2 / 8;
+
+    unsigned end_offset = x2 % 8; //at which bit line would end?
+    unsigned last_full_byte = x2 / 8;
     if (end_offset != 7)
         last_full_byte--;
-    
+
     // set full byte
-    for (int i = first_full_byte; i <= last_full_byte; i++)
+    for (unsigned i = first_full_byte; i <= last_full_byte; i++)
         screen[y * (width / 8) + i] = (uint8_t)0xFF;
 
     // create masks for start and end of line;
@@ -41,14 +40,35 @@ void drawLine(uint8_t screen[], int width, int x1, int x2, int y)
     }
 }
 
+int computeByteNum(int width, int x, int y)
+{
+    return (width * y + x) / 8;
+}
+
+void printScreen(uint8_t screen[], unsigned n, int width)
+{
+    int height = n * 8 / width;
+    for (int r = 0; r < height; r++)
+    {
+        for (int c = 0; c < width; c += 8)
+        {
+            int i = computeByteNum(width, c, r);
+            cout << bitset<8>(screen[i]);
+            //printByte(b);
+        }
+        cout << endl;
+    }
+}
 
 int main()
 {
-    uint8_t screen[8] = {0};
-    for(uint8_t i:screen) cout << bitset<8>(i) << endl;
-    drawLine(screen, 8, 3, 9, 4);
+    int n = 16;
+    uint8_t screen[n] = {0};
+    unsigned width = 32u;
+    printScreen(screen, n, width);
+    //y should be within the height n*8/width
+    drawLine(screen, width, 3, 15, 2);
     cout << "After draw line\n";
-    for(uint8_t i:screen) cout << bitset<8>(i) << endl;
-    
+    printScreen(screen, n, width);
     return 0;
 }

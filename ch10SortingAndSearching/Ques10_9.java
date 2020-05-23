@@ -68,14 +68,15 @@ public class Ques10_9 {
         int midRow = m / 2;
         int midCol = n / 2;
         boolean[][] visited = new boolean[m][n];
-        System.out.println(arr[midRow][midCol]);
+        // System.out.println(arr[midRow][midCol]);
         Pair res = searchMatrixHelper(arr, visited, key, midRow, midCol, m, n);
-        printMatrixBoolean(visited);
+        // printMatrixBoolean(visited);
         return res;
     }
 
     public static Pair searchMatrix2(int[][] matrix, int target) {
-        if (matrix.length == 0 || matrix[0].length == 0) return null;
+        if (matrix.length == 0 || matrix[0].length == 0)
+            return null;
 
         int numOfRows = matrix.length;
         int numOfCols = matrix[0].length;
@@ -102,39 +103,70 @@ public class Ques10_9 {
         return null;
     }
 
-    public static void main(String[] args) {
-        int[][] A = { { 1, 2, 3, 4, 5 }, { 6, 7, 8, 9, 10 }, { 11, 12, 13, 14, 15 }, { 16, 17, 18, 19, 20 },
-                { 21, 22, 23, 24, 25 } };
-        printMatrix(A);
+    public static void testBruteForce(int[][] A, ArrayList<Integer> keys) {
+
+        ArrayList<Pair> res = new ArrayList<Pair>();
         long startTime = System.nanoTime();
-        Pair result = searchMatrix(A, 24);
+        for (Integer i : keys) {
+            res.add(searchMatrix(A, i));
+        }
+
         long endTime = System.nanoTime();
         long timeElapsed = endTime - startTime;
 
-		System.out.println("Execution time in nanoseconds  : " + timeElapsed);
+        System.out.println("Execution time in nanoseconds  : " + timeElapsed);
 
-		System.out.println("Execution time in milliseconds : " + 
-								timeElapsed / 1000000);
-        if (result != null)
-            System.out.println(result.i + ", " + result.j);
-        else
-            System.out.println("Nothing found or algorithm failed.");
+        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000);
+        for (Pair pair : res) {
+            if (pair != null)
+                System.out.print("[" + pair.i + "," + pair.j + "] , ");
+            else
+                System.out.print("null, ");
+        }
+        System.out.println();
+    }
+
+    public static void testFaster(int[][] A, ArrayList<Integer> keys) {
+
+        ArrayList<Pair> res = new ArrayList<Pair>();
+        long startTime = System.nanoTime();
+        for (Integer i : keys) {
+            res.add(searchMatrix2(A, i));
+        }
+
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+
+        System.out.println("Execution time in nanoseconds  : " + timeElapsed);
+
+        System.out.println("Execution time in milliseconds : " + timeElapsed / 1000000);
+        for (Pair pair : res) {
+            if (pair != null)
+                System.out.print("[" + pair.i + "," + pair.j + "] , ");
+            else
+                System.out.print("null, ");
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        int[][] A = { { 1, 2, 3, 4, 5 }, { 6, 7, 8, 9, 10 }, { 11, 12, 13, 14, 15 }, { 16, 17, 18, 19, 20 },
+                { 21, 22, 23, 24, 25 } };
+
+        ArrayList<Integer> keys = new ArrayList<Integer>();
+        for (int[] arr : A)
+            for (int x : arr)
+                keys.add(x);
+        int[] nonExistents = { -1, -2, -3, -4, -5, 55, 66, 77, 88 };
+        for (int i : nonExistents)
+            keys.add(i);
 
         printMatrix(A);
-        
-        startTime = System.nanoTime();
-        result = searchMatrix2(A, 24);
-        endTime = System.nanoTime();
-        timeElapsed = endTime - startTime;
 
-		System.out.println("Execution time in nanoseconds  : " + timeElapsed);
+        // printMatrix(A);
 
-		System.out.println("Execution time in milliseconds : " + 
-								timeElapsed / 1000000);
-        if (result != null)
-            System.out.println(result.i + ", " + result.j);
-        else
-            System.out.println("Nothing found or algorithm failed.");
+        testBruteForce(A, keys);
+        testFaster(A, keys);
     }
 
     static void printMatrix(int[][] arr) {

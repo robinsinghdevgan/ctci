@@ -18,22 +18,26 @@ void display(Point par)
 Point intersection(Point A, Point B, Point C, Point D)
 {
     // Line AB represented as a1x + b1y = c1
-    double a = B.y - A.y;
-    double b = A.x - B.x;
-    double c = a * (A.x) + b * (A.y);
+    double a1 = std::abs(B.y - A.y);
+    double b1 = std::abs(A.x - B.x);
+    double c1 = a1 * (A.x) + b1 * (A.y);
     // Line CD represented as a2x + b2y = c2
-    double a1 = D.y - C.y;
-    double b1 = C.x - D.x;
-    double c1 = a1 * (C.x) + b1 * (C.y);
-    double det = a * b1 - a1 * b;
+    double a2 = std::abs(D.y - C.y);
+    double b2 = std::abs(C.x - D.x);
+    double c2 = a2 * (C.x) + b2 * (C.y);
+    //Calculate determinant
+    // |a1 b1|
+    // |a2 b2|
+    double det = std::abs(a1 * b2 - a2 * b1);
     if (det == 0)
     {
-        return Point(std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+        double max = std::numeric_limits<double>::max();
+        return Point(max, max);
     }
     else
     {
-        double x = (b1 * c - b * c1) / det;
-        double y = (a * c1 - a1 * c) / det;
+        double x = (std::abs(b2 * c1 - b1 * c2)) / det;
+        double y = (std::abs(a1 * c2 - a2 * c1)) / det;
         return Point(x, y);
     }
 }

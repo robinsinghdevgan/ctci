@@ -38,7 +38,7 @@ public:
         perpendicular = fabs(b.y - a.y);
         base = fabs(b.x-a.x);
         hypotenuse = sqrt(perpendicular*perpendicular + base*base);
-        slope = fabs(b.y - a.y)/fabs(b.x-a.x);
+        slope = (b.x-a.x) != 0 ? (b.y - a.y)/(b.x-a.x) : 0;
         angle_from_x_axis = atan(perpendicular/base); //radians
     }
 
@@ -85,7 +85,7 @@ Line findLineThatCutTwoSquaresInHalves(Square A, Square B)
     return Line(A.centre, B.centre);
 }
 
-double test1()
+int test1()
 {
     Square A(5, Point(0, 0));
     Square B(5, Point(6, 0));
@@ -94,7 +94,7 @@ double test1()
     return 0;
 }
 
-double test2()
+int test2()
 {
     Square A(5, Point(0, 0));
     Square B(6, Point(10, 10));
@@ -103,10 +103,28 @@ double test2()
     return 0;
 }
 
-double test3()
+int test3()
 {
     Square A(5, Point(-10, -10));
     Square B(8, Point(15, 10));
+    Line result = findLineThatCutTwoSquaresInHalves(A, B);
+    cout << result << endl;
+    return 0;
+}
+
+int test4()
+{
+    Square A(5, Point(-10, 50));
+    Square B(8, Point(15, 0));
+    Line result = findLineThatCutTwoSquaresInHalves(A, B);
+    cout << result << endl;
+    return 0;
+}
+
+int test5()
+{
+    Square A(5, Point(0, 0));
+    Square B(5, Point(0, 6));
     Line result = findLineThatCutTwoSquaresInHalves(A, B);
     cout << result << endl;
     return 0;
@@ -117,5 +135,7 @@ int main(int argc, char const *argv[])
     assert(test1() == 0);
     assert(test2() == 0);
     assert(test3() == 0);
+    assert(test4() == 0);
+    assert(test5() == 0);
     return 0;
 }

@@ -3,7 +3,7 @@ using namespace std;
 
 struct Point
 {
-    long long x, y;
+    double x, y;
     Point(double a, double b)
     {
         x = a;
@@ -18,17 +18,17 @@ void display(Point par)
 Point intersection(Point A, Point B, Point C, Point D)
 {
     // Line AB represented as a1x + b1y = c1
-    double a1 = std::abs(B.y - A.y);
-    double b1 = std::abs(A.x - B.x);
+    double a1 = std::fabs(B.y - A.y);
+    double b1 = std::fabs(A.x - B.x);
     double c1 = a1 * (A.x) + b1 * (A.y);
     // Line CD represented as a2x + b2y = c2
-    double a2 = std::abs(D.y - C.y);
-    double b2 = std::abs(C.x - D.x);
+    double a2 = std::fabs(D.y - C.y);
+    double b2 = std::fabs(C.x - D.x);
     double c2 = a2 * (C.x) + b2 * (C.y);
     //Calculate determinant
     // |a1 b1|
     // |a2 b2|
-    double det = std::abs(a1 * b2 - a2 * b1);
+    double det = std::fabs(a1 * b2 - a2 * b1);
     if (det == 0)
     {
         double max = std::numeric_limits<double>::max();
@@ -36,8 +36,8 @@ Point intersection(Point A, Point B, Point C, Point D)
     }
     else
     {
-        double x = (std::abs(b2 * c1 - b1 * c2)) / det;
-        double y = (std::abs(a1 * c2 - a2 * c1)) / det;
+        double x = (b1 * c2 - b2 * c1) / det;
+        double y = (a2 * c1 - a1 * c2) / det; //https://byjus.com/point-of-intersection-formula/
         return Point(x, y);
     }
 }

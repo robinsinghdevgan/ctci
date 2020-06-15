@@ -5,7 +5,7 @@ import java.util.Map;
 
 import static java.util.Arrays.asList;
 
-public class Q16_12 {
+public class Ques16_12 {
 
   private static final int END = 0;
 

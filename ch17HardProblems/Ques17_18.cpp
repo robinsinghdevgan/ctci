@@ -1,32 +1,48 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <algorithm>
 using namespace std;
-using vi = vector<int>;
-using pii = pair<int, int>;
-
-pii paishortestSupersequence(vi arr, vi set)
+int findNextInstance(int arr[], int n, int element, int index)
 {
-    unordered_map<int, int> hm;
-    for (int i = 0; i < arr.size(); ++i) //O(N): time and space
-        hm[arr[i]] = i;
-    int min = numeric_limits<int>::max();
-    int max = numeric_limits<int>::min();
-    for (const int &i : set) //O(K)
+    for (int i = index; i < n; i++)
+        if (arr[i] == element)
+            return i;
+    return -1;
+}
+int findClosure(int bigArray[], int smallArray[], int b, int s, int index)
+{
+    int mx = -1;
+    for (int i = 0; i < s; i++)
     {
-        if (hm.find(i) != hm.end())
+        int next = findNextInstance(bigArray, b, smallArray[i], index);
+        if (next == -1)
+            return -1;
+        mx = max(next, mx);
+    }
+    return mx;
+}
+void shortestSupersequence(int bigArray[], int smallArray[], int b, int s)
+{
+    int bestStart = -1;
+    int bestEnd = -1;
+    for (int i = 0; i < b; i++)
+    {
+        int end = findClosure(bigArray, smallArray, b, s, i);
+        if (end == -1)
+            break;
+        if (bestStart == -1 || end - i < bestEnd - bestStart)
         {
-            int index = hm[i];
-            min = std::min(min, index);
-            max = std::max(max, index);
+            bestStart = i;
+            bestEnd = end;
         }
     }
-    cout << min << " " << max << endl;
-    return make_pair(min, max);
+    cout << bestStart << ", " << bestEnd << endl;
 }
-
 int main()
 {
-    vi array = {7, 5, 9, 0, 2, 1, 3, 5, 7, 9, 1, 1, 5, 8, 8, 9, 7};
-    vi set = {1, 5, 9};
-    paishortestSupersequence(array, set);
+    int arr[] = {7, 5, 9, 0, 2, 1, 3, 5, 7, 9, 1, 1, 5, 8, 9, 7};
+    int arr_set[] = {1, 5, 9};
+    int b = sizeof(arr) / sizeof(arr[0]);
+    int s = sizeof(arr_set) / sizeof(arr_set[0]);
+    shortestSupersequence(arr, arr_set, b, s);
     return 0;
 }
